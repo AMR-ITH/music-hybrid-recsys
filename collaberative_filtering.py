@@ -22,8 +22,13 @@ def save_user_listening_data(cwd_path,cleaned_songs: pd.DataFrame, user_history:
 
     unique_track_ids = user_history["track_id"].unique()
 
-    filtered_songs = cleaned_songs[cleaned_songs["track_id"].isin(unique_track_ids)]
+    # Create a copy of the filtered DataFrame to avoid SettingWithCopyWarning
+    filtered_songs = cleaned_songs[cleaned_songs["track_id"].isin(unique_track_ids)].copy()
+    filtered_songs.loc[:, 'track_id'] = filtered_songs['track_id'].astype('category')
+    filtered_songs.sort_values("track_id", inplace=True)
     filtered_songs.reset_index(drop=True, inplace=True)
+
+    print(f"Filtered songs data shape: {filtered_songs.shape}")
 
     path_loc = cwd_path / "data" / "filtered_songs.csv"
     filtered_songs.to_csv(path_loc, index=False)
@@ -31,18 +36,27 @@ def save_user_listening_data(cwd_path,cleaned_songs: pd.DataFrame, user_history:
     return filtered_songs
 
 
-def ultilty_df(cwd_path,user_history: pd.DataFrame) -> pd.DataFrame:
+def ultilty_df( user_history: pd.DataFrame) -> pd.DataFrame:
+    # Ensure track_id and user_id are of type 'category'
+    user_history["track_id"] = user_history["track_id"].astype("category")
+    user_history["user_id"] = user_history["user_id"].astype("category")
 
-    df = user_history
+    # Debug: Verify column types
+    print(f"track_id dtype: {user_history['track_id'].dtype}")
+    print(f"user_id dtype: {user_history['user_id'].dtype}")
+
+    # Sort by user_id and track_id
+    df = user_history.sort_values(["track_id", "user_id"]).copy()
+    df.reset_index(drop=True, inplace=True)
+
+    # Create a new column 'track_id_codes' to store the codes of the 'track_id' category
 
     df["track_id"] = df["track_id"].astype("category")
     df["user_id"] = df["user_id"].astype("category")
 
-    df["track_id_codes"] = user_history["track_id"].cat.codes
-    df["user_id_codes"] = user_history["user_id"].cat.codes
+    df["track_id_codes"] = df["track_id"].cat.codes
+    df["user_id_codes"] = df["user_id"].cat.codes
 
-    path_loc = cwd_path / "data" / "utility_df.csv"
-    df.to_csv(path_loc, index=False)
 
     return df
 
@@ -64,43 +78,33 @@ def save_item_user_matrix(cwd_path,utility_df: pd.DataFrame) -> None:
     save_npz(path_loc, sparse_matrix)
     print("Sparse matrix saved to item_user_matrix.npz")
 
-def collaborative_recommendation(song_name,artist_name,user_data,songs_data,interaction_matrix,k):
+def collaborative_recommendation(song_name,artist_name,songs_data,interaction_matrix,k):
     song_row = songs_data[(songs_data["name"].str.lower()== song_name.lower()) & (songs_data["artist"].str.lower() == artist_name.lower())]
     if song_row.empty:
         print(f"Song '{song_name}' by '{artist_name}' not found.")
         return None
     
-    # Ensure 'track_id' column is of type 'category'
-    if user_data['track_id'].dtype != 'category':
-        user_data['track_id'] = user_data['track_id'].astype('category')
-
+    songs_data['track_id'] = songs_data['track_id'].astype('category')
     # track_id of input song
     input_track_id = song_row['track_id'].values.item()
     print(input_track_id)
     # index value of track_id
-    input_track_index = np.where(user_data['track_id'].cat.categories == input_track_id)[0].item()
+    input_track_index = np.where(songs_data['track_id'].cat.categories == input_track_id)[0].item()
     print(input_track_index)
 
 
     input_track_vector = interaction_matrix[input_track_index]
     similarity_scores = cosine_similarity(input_track_vector, interaction_matrix)
+    print("similarity score",similarity_scores)
+    print("arg sort ",)
     # top scores
-    recommendation_track_ids = np.argsort(similarity_scores.ravel())[-k:][::-1]
+    recommendation_track_ids = np.argsort(-similarity_scores).ravel()[:k]
     print(recommendation_track_ids)
-    top_trackids  = user_data['track_id'].cat.categories[recommendation_track_ids]
-    print(top_trackids)
+    print(songs_data.iloc[recommendation_track_ids])
 
-    # get the songs from data and print
-    scores_df = pd.DataFrame({"track_id":top_trackids.tolist(),
-                            "score":np.arange(k,0,-1)})
-    print(scores_df.head())
-  #   songs_data[songs_data['track_id'].isin(list(top_five_trackids))]
     return (
       songs_data
-      .loc[songs_data["track_id"].isin(list(top_trackids))]
-      .merge(scores_df, on="track_id")
-      .sort_values("score", ascending=False)
-      .drop(columns=["track_id","score"])
+      .iloc[recommendation_track_ids]
       .reset_index(drop=True)
   )
 
@@ -112,6 +116,8 @@ def main():
     cleaned_songs_path = cwd_path / "data" / "cleaned_data.csv"
     user_history_path = cwd_path / "data" / "User Listening History.csv"
 
+    
+
 
     # Load the cleaned songs data
     cleaned_songs = pd.read_csv(cleaned_songs_path)
@@ -119,11 +125,12 @@ def main():
     # Load the user listening history data
     user_history = pd.read_csv(user_history_path)
 
+
     # save the filtered songs data
     save_user_listening_data(cwd_path,cleaned_songs, user_history)
 
-    # save the utility_df
-    utility_df = ultilty_df(cwd_path,user_history)
+    # utility_df
+    utility_df = ultilty_df(user_history)
 
     # item user matrix 
     save_item_user_matrix(cwd_path,utility_df)
@@ -142,7 +149,7 @@ def main():
     # interaction_matrix = load_npz(path_loc_item_user_mat)
     # filtered_songs_df = pd.read_csv(path_loc_filtered_songs)
 
-    # df_result = collaborative_recommendation(song_name,artist_name,utility_df,
+    # df_result = collaborative_recommendation(song_name,artist_name,
     #                          filtered_songs_df,
     #                          interaction_matrix,k=5)
     # print(df_result.head())
