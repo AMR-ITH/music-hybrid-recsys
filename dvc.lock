@@ -1,0 +1,101 @@
+schema: '2.0'
+stages:
+  data_cleaning:
+    cmd: python data_cleaning.py
+    deps:
+    - path: data/Music Info.csv
+      hash: md5
+      md5: e63b74919a3cdada5c804df4666391c9
+      size: 14985870
+    - path: data_cleaning.py
+      hash: md5
+      md5: 8913ce33eedae868af4846c6daefc97a
+      size: 2841
+    outs:
+    - path: data/cleaned_data.csv
+      hash: md5
+      md5: ad73ab9b7c97fed0f3cc26fc9b24f8c6
+      size: 13712182
+  content_based_filtering:
+    cmd: python content_based_filtering.py
+    deps:
+    - path: content_based_filtering.py
+      hash: md5
+      md5: 1d8a84119179656fb6edf2ea534463a3
+      size: 5821
+    - path: data/cleaned_data.csv
+      hash: md5
+      md5: ad73ab9b7c97fed0f3cc26fc9b24f8c6
+      size: 13712182
+    outs:
+    - path: data/transformed_data.npz
+      hash: md5
+      md5: e8d5f3f3cb84de06915ddbedc0e3e7c4
+      size: 4523508
+    - path: transformer.joblib
+      hash: md5
+      md5: 5df0ab3463b67fb999db8b7664c17f56
+      size: 193384
+  collaborative_filtering:
+    cmd: python collaberative_filtering.py
+    deps:
+    - path: collaberative_filtering.py
+      hash: md5
+      md5: 7f39c7caac581d14aad89426fc379f2c
+      size: 5613
+    - path: data/User Listening History.csv
+      hash: md5
+      md5: 3a12e713844195171c7040c051d6d4ae
+      size: 602515573
+    - path: data/cleaned_data.csv
+      hash: md5
+      md5: ad73ab9b7c97fed0f3cc26fc9b24f8c6
+      size: 13712182
+    outs:
+    - path: data/filtered_songs.csv
+      hash: md5
+      md5: f0f182d757a9837caa7ff619cab9ffd0
+      size: 8260460
+    - path: data/item_user_matrix.npz
+      hash: md5
+      md5: 6be93bc6fc4f2f97bb807f8fad3a58c7
+      size: 32215202
+  utility_hybrid:
+    cmd: python utility_required_hybridrec.py
+    deps:
+    - path: data/filtered_songs.csv
+      hash: md5
+      md5: f0f182d757a9837caa7ff619cab9ffd0
+      size: 8260460
+    - path: transformer.joblib
+      hash: md5
+      md5: 5df0ab3463b67fb999db8b7664c17f56
+      size: 193384
+    - path: utility_required_hybridrec.py
+      hash: md5
+      md5: 6979ef6e9c8c661fd7a8cd6ca3e07af9
+      size: 1145
+    outs:
+    - path: data/content_based.npz
+      hash: md5
+      md5: 86795d76d28b60c886b293b2f3d5c3c7
+      size: 2977348
+  hybrid_recommender:
+    cmd: python hybrid_recomender.py
+    deps:
+    - path: data/content_based.npz
+      hash: md5
+      md5: 86795d76d28b60c886b293b2f3d5c3c7
+      size: 2977348
+    - path: data/filtered_songs.csv
+      hash: md5
+      md5: f0f182d757a9837caa7ff619cab9ffd0
+      size: 8260460
+    - path: data/item_user_matrix.npz
+      hash: md5
+      md5: 6be93bc6fc4f2f97bb807f8fad3a58c7
+      size: 32215202
+    - path: hybrid_recomender.py
+      hash: md5
+      md5: 1294c863fe1095ca39124491462c7128
+      size: 3146

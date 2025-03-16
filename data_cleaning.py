@@ -30,7 +30,7 @@ def clean_data(music_data: pd.DataFrame) -> pd.DataFrame:
     
     cleaned_data = (
         music_data
-        .drop_duplicates(subset=["spotify_id", "year", "duration_ms"])
+        .drop_duplicates(subset=["track_id"])
         .drop(columns=["genre", "spotify_id"], errors="ignore")
         .fillna({"tags": "no_tags"})
         .assign(
@@ -79,3 +79,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

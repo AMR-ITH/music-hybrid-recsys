@@ -98,7 +98,7 @@ def collaborative_recommendation(song_name,artist_name,songs_data,interaction_ma
     print("similarity score",similarity_scores)
     print("arg sort ",)
     # top scores
-    recommendation_track_ids = np.argsort(-similarity_scores).ravel()[:k]
+    recommendation_track_ids = np.argsort(-similarity_scores).ravel()[:k+1]
     print(recommendation_track_ids)
     print(songs_data.iloc[recommendation_track_ids])
 

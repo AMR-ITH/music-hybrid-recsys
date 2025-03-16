@@ -104,7 +104,7 @@ def recommend(song_name,artist_name, songs_data, transformed_data, k=10):
     """
     try:
         song_name = song_name.strip().lower()
-        song_row = songs_data[(songs_data["name"].str.lower() == song_name) & (songs_data["artist"].str.lower() == artist_name)]
+        song_row = songs_data[(songs_data["name"].str.lower() == song_name.lower()) & (songs_data["artist"].str.lower() == artist_name.lower())]
 
         if song_row.empty:
             logging.warning(f"Song '{song_name}' not found.")
@@ -142,12 +142,10 @@ def main():
 
         transformed_data = transform_data(df_content_similarity)
         save_transformed_data(transformed_data, "data/transformed_data.npz")
-        top_ten_songs = recommend("Whenever, Wherever", cleaned_data, transformed_data, k=10)
 
-        if top_ten_songs is not None:
-            print(top_ten_songs)
-        else:
-            logging.warning("No recommendations generated.")
+        
+        # top_ten_songs = recommend("love story","taylor swift", cleaned_data, transformed_data, k=10)
+
     except Exception as e:
         logging.error(f"Error in main: {e}", exc_info=True)
 

@@ -1,0 +1,46 @@
+stages:
+  data_cleaning:
+    cmd: python data_cleaning.py
+    deps:
+      - data/Music Info.csv
+      - data_cleaning.py
+    outs:
+      - data/cleaned_data.csv
+  
+  content_based_filtering:
+    cmd: python content_based_filtering.py
+
+    deps:
+      - data/cleaned_data.csv
+      - content_based_filtering.py
+    outs:
+      - data/transformed_data.npz
+      - transformer.joblib
+  
+  collaborative_filtering:
+    cmd: python collaberative_filtering.py
+    deps:
+      - data/cleaned_data.csv
+      - data/User Listening History.csv
+      - collaberative_filtering.py
+    outs:
+    # transformed_data.npz is the output of the collaborative_filtering.py
+      - data/item_user_matrix.npz
+      - data/filtered_songs.csv
+  
+  utility_hybrid:
+    cmd: python utility_required_hybridrec.py
+    deps:
+      - data/filtered_songs.csv
+      - transformer.joblib
+      - utility_required_hybridrec.py
+    outs:
+      - data/content_based.npz
+  
+  hybrid_recommender:
+    cmd: python hybrid_recomender.py
+    deps:
+      - data/filtered_songs.csv
+      - data/content_based.npz
+      - data/item_user_matrix.npz
+      - hybrid_recomender.py
