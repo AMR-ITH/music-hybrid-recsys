@@ -98,7 +98,6 @@ pygtrie==2.5.0
 pyparsing==3.2.1
 python-dateutil==2.9.0.post0
 pytz==2025.1
-pywin32==309
 PyYAML==6.0.2
 referencing==0.36.2
 requests==2.32.3
