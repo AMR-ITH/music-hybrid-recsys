@@ -31,8 +31,14 @@ COPY app.py \
      data_cleaning.py \
      ./
 
-# expose the port on the container
+
 EXPOSE 8000
+# run the streamlit app
+CMD [ "streamlit", "run", "app.py", "--server.port=8000", "--server.address=0.0.0.0" ]
+
+
+# expose the port on the container
+# EXPOSE 8000
 
 # run the streamlit app with additional flags
-CMD [ "streamlit", "run", "app.py", "--server.port=8000", "--server.enableCORS=false", "--server.enableXsrfProtection=false" ]
+# CMD [ "streamlit", "run", "app.py", "--server.port=8000", "--server.enableCORS=false", "--server.enableXsrfProtection=false" ]

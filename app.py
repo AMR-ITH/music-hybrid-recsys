@@ -1,125 +1,3 @@
-# import streamlit as st
-# import requests
-# import json
-# import time
-# import os
-
-# st.title("Spotify Audio Diagnostic Tool")
-
-# # Test URL - Use one that you know works locally
-# test_url = "https://p.scdn.co/mp3-preview/4d26180e6961fd46866cd9106936ea55dfcbaa75?cid=774b29d4f13844c495f206cafdad9c86"
-
-# st.write("### 1. Testing URL Accessibility")
-# st.code(test_url, language="text")
-
-# # Check if we can access the URL
-# try:
-#     start_time = time.time()
-#     response = requests.head(test_url, timeout=10)
-#     end_time = time.time()
-    
-#     st.write(f"URL Response Code: {response.status_code}")
-#     st.write(f"Response Time: {end_time - start_time:.2f} seconds")
-    
-#     if response.status_code == 200:
-#         st.success("✅ URL is accessible from the container")
-#     else:
-#         st.error(f"❌ URL returned status code {response.status_code}")
-#         st.write("Response Headers:")
-#         st.code(json.dumps(dict(response.headers), indent=2), language="json")
-# except Exception as e:
-#     st.error(f"❌ Error accessing URL: {str(e)}")
-
-# st.write("### 2. Testing Environment")
-# st.write(f"Python version: {os.popen('python --version').read().strip()}")
-# st.write(f"Container hostname: {os.popen('hostname').read().strip()}")
-# st.write(f"Network connectivity: {os.popen('ping -c 1 8.8.8.8 || echo \"Ping failed\"').read().strip()}")
-# st.write(f"DNS resolution: {os.popen('nslookup p.scdn.co || echo \"DNS lookup failed\"').read().strip()}")
-
-# st.write("### 3. Testing Audio Playback Methods")
-
-# st.write("#### Method 1: Native Streamlit Audio")
-# try:
-#     st.audio(test_url, format="audio/mp3")
-#     st.write("Did you hear any audio? If not, this method failed.")
-# except Exception as e:
-#     st.error(f"Error: {str(e)}")
-
-# st.write("#### Method 2: HTML5 Audio Player")
-# try:
-#     html = f"""
-#     <audio controls style="width: 100%;">
-#         <source src="{test_url}" type="audio/mpeg">
-#         Your browser does not support the audio element.
-#     </audio>
-#     """
-#     st.markdown(html, unsafe_allow_html=True)
-#     st.write("Did you hear any audio? If not, this method failed.")
-# except Exception as e:
-#     st.error(f"Error: {str(e)}")
-
-# st.write("#### Method 3: Direct Download and Play")
-# try:
-#     response = requests.get(test_url, timeout=10)
-#     if response.status_code == 200:
-#         audio_bytes = response.content
-#         st.write(f"Downloaded {len(audio_bytes)} bytes of audio data")
-#         st.audio(audio_bytes, format="audio/mp3")
-#         st.write("Did you hear any audio? If not, this method failed.")
-#     else:
-#         st.error(f"Failed to download audio: Status code {response.status_code}")
-# except Exception as e:
-#     st.error(f"Error: {str(e)}")
-
-# st.write("### 4. Browser Console Information")
-# st.write("""
-# Please open your browser's developer tools (F12 or right-click -> Inspect) and check the Console tab for any errors related to audio playback. 
-# Common errors include:
-# - CORS policy violations
-# - Mixed content warnings
-# - Network failures
-# """)
-
-# st.write("### 5. Workaround Solution")
-# st.write("""
-# If none of the above methods work, try this workaround:
-# 1. Add a proxy server to your app that fetches the audio and serves it locally
-# 2. Use HTTPS for your Streamlit app
-# 3. Use a different audio player library
-# """)
-
-# proxy_code = """
-# # Example proxy endpoint in Flask
-# from flask import Flask, request, Response
-# import requests
-
-# app = Flask(__name__)
-
-# @app.route('/proxy-audio')
-# def proxy_audio():
-#     url = request.args.get('url')
-#     if not url:
-#         return "Missing URL parameter", 400
-    
-#     try:
-#         response = requests.get(url, stream=True)
-#         return Response(
-#             response.iter_content(chunk_size=1024),
-#             content_type=response.headers['Content-Type']
-#         )
-#     except Exception as e:
-#         return str(e), 500
-
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
-# """
-
-# st.code(proxy_code, language="python")
-
-
-
-
-
 import streamlit as st
 from content_based_filtering import recommend
 from scipy.sparse import load_npz
@@ -127,8 +5,7 @@ import pandas as pd
 from collaberative_filtering import collaborative_recommendation
 from hybrid_recomender import hybrid_rec
 from pathlib import Path
-import requests
-from io import BytesIO
+
 
 # Enhanced audio player function with multiple fallback methods
 def display_audio_player(url):
@@ -142,64 +19,17 @@ def display_audio_player(url):
         st.write("No preview available for this song")
         return
     
-    # First attempt: Direct download and play from memory
+# Simple direct method - avoids multiple download attempts
     try:
-        with st.spinner("Loading audio..."):
-            response = requests.get(url, timeout=10)
-            
-        if response.status_code == 200:
-            audio_bytes = response.content
-            st.audio(audio_bytes, format="audio/mp3")
-            return  # Exit if successful
-        else:
-            st.warning(f"Could not download audio (Status: {response.status_code}). Trying alternative methods...")
-    except Exception as e:
-        st.warning(f"Download failed: {str(e)}. Trying alternative methods...")
-    
-    # Second attempt: Direct streaming via Streamlit's audio component
-    try:
-        st.audio(url, format="audio/mp3")
-    except Exception as e:
-        st.warning(f"Streamlit audio player failed. Trying HTML5 player...")
-    
-    # Third attempt: HTML5 audio player
-    try:
-        html = f"""
-        <audio controls style="width: 100%;">
-            <source src="{url}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-        """
-        st.markdown(html, unsafe_allow_html=True)
-    except Exception as e:
-        st.error(f"All playback methods failed")
-    
-    # Always provide a direct link as final fallback
-    st.markdown(f"[Open audio in new tab]({url})", unsafe_allow_html=True)
-    
-    # Add troubleshooting expander
-    with st.expander("Audio not playing? Troubleshooting tips"):
-        st.write("1. Check your browser's console for CORS errors (Press F12 > Console tab)")
-        st.write("2. Try opening the link in a new tab to test direct access")
-        st.write("3. Ensure your browser allows audio playback")
-        st.write("4. If using a VPN or proxy, try disabling it")
-        
-        if st.button("Test URL Accessibility"):
-            try:
-                import time
-                start_time = time.time()
-                test_response = requests.head(url, timeout=5)
-                end_time = time.time()
-                
-                st.write(f"URL Response: {test_response.status_code}")
-                st.write(f"Response Time: {(end_time - start_time):.2f} seconds")
-                
-                if test_response.status_code == 200:
-                    st.success("✅ URL is accessible")
-                else:
-                    st.error(f"❌ URL returned status code {test_response.status_code}")
-            except Exception as e:
-                st.error(f"❌ Error testing URL: {str(e)}")
+        # Use a placeholder to show loading state
+        with st.empty():
+            st.write("Loading audio...")
+            # Direct approach with timeout
+            st.audio(url, format="audio/mp3")
+    except Exception:
+        # Fallback to just providing a link
+        st.write("Audio preview couldn't be loaded automatically")
+        st.markdown(f"[Open audio in new tab]({url})")
 
 # path
 transformed_data_path = "data/transformed_data.npz"
