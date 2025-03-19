@@ -30,8 +30,10 @@ RUN mkdir -p /app/ssl && \
 # Expose port 8000 for HTTPS
 EXPOSE 8000
 
-# Run Streamlit with HTTPS on port 8000
+# Run Streamlit with HTTPS and WebSocket support
 CMD ["streamlit", "run", "app.py", \
       "--server.port", "8000", \
+      "--server.address", "0.0.0.0", \
       "--server.sslCertFile", "/app/ssl/cert.pem", \
-      "--server.sslKeyFile", "/app/ssl/key.pem"]
+      "--server.sslKeyFile", "/app/ssl/key.pem", \
+      "--server.enableWebsocketCompression", "true"]
