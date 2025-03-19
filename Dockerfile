@@ -1,24 +1,17 @@
-# set up the base image
+# Use the official Python base image
 FROM python:3.12
 
-# set the working directory
-WORKDIR /app/
+# Set the working directory
+WORKDIR /app
 
-# copy the requirements file to workdir
+# Copy requirements and install dependencies
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# install the requirements
-RUN pip install -r requirements.txt
+# Copy data files
+COPY ./data/ /app/data/
 
-# Copy all required data files at once
-COPY ./data/cleaned_data.csv \
-     ./data/content_based.npz \
-     ./data/item_user_matrix.npz \
-     ./data/transformed_data.npz \
-     ./data/filtered_songs.csv \
-     ./data/
-
-# Copy all required Python scripts at once
+# Copy Python scripts
 COPY app.py \
      collaberative_filtering.py \
      content_based_filtering.py \
@@ -27,8 +20,18 @@ COPY app.py \
      data_cleaning.py \
      ./
 
-# expose the port on the container
+# Generate self-signed SSL certificates INSIDE the container
+RUN mkdir -p /app/ssl && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+      -keyout /app/ssl/key.pem \
+      -out /app/ssl/cert.pem \
+      -subj "/C=US/ST=State/L=City/O=Org/CN=localhost"
+
+# Expose port 8000 for HTTPS
 EXPOSE 8000
 
-# run the streamlit app
-CMD [ "streamlit", "run", "app.py", "--server.port", "8000" ]
+# Run Streamlit with HTTPS on port 8000
+CMD ["streamlit", "run", "app.py", \
+      "--server.port", "8000", \
+      "--server.sslCertFile", "/app/ssl/cert.pem", \
+      "--server.sslKeyFile", "/app/ssl/key.pem"]
