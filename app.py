@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 # Enhanced audio player function with multiple fallback methods
+
 def display_audio_player(url):
     """
     Enhanced audio player function for Spotify preview URLs with multiple fallback methods
