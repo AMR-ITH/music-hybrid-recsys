@@ -10,6 +10,7 @@ COPY requirements.txt .
 # install the requirements
 RUN pip install -r requirements.txt
 
+
 # Create .streamlit directory and config file
 # RUN mkdir -p .streamlit
 # RUN echo '[server]\nenableCORS = false\nenableXsrfProtection = false' > .streamlit/config.toml
