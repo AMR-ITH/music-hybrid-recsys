@@ -32,9 +32,10 @@ COPY app.py \
      ./
 
 
+# expose the port on the container
 EXPOSE 8000
-# run the streamlit app
-CMD [ "streamlit", "run", "app.py", "--server.port=8000", "--server.address=0.0.0.0" ]
+# run the streamlit app with the correct logging flag
+CMD [ "streamlit", "run", "app.py", "--server.port", "8000", "--logger.level", "debug" ]
 
 
 # expose the port on the container
