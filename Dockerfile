@@ -11,8 +11,8 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Create .streamlit directory and config file
-RUN mkdir -p .streamlit
-RUN echo '[server]\nenableCORS = false\nenableXsrfProtection = false' > .streamlit/config.toml
+# RUN mkdir -p .streamlit
+# RUN echo '[server]\nenableCORS = false\nenableXsrfProtection = false' > .streamlit/config.toml
 
 # Copy all required data files at once
 COPY ./data/cleaned_data.csv \
