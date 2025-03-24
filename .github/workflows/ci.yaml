@@ -91,13 +91,14 @@ jobs:
           data/transformed_data.npz \
           data/filtered_songs.csv \
           app.py \
-          collaborative_filtering.py \
+          collaberative_filtering.py \
           content_based_filtering.py \
-          hybrid_recommender.py \
+          hybrid_recomender.py \
           utility_required_hybridrec.py \
           data_cleaning.py \
           requirements.txt
-
+          
+          
 
     - name: Upload ZIP to S3
       if: success()
