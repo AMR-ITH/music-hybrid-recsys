@@ -64,11 +64,16 @@ jobs:
     #     docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
     #     docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
+            # zip -r deployment.zip appspec.yml deploy/scripts/
+        # install_dependencies.sh deploy/scripts/start_docker.sh
+
+
+        # aws s3 cp deployment.zip s3://hybridrecsysdeployementbucket/deployment.zip
+
     - name: Zip files for deployment
       run: |
-        zip -r deployment.zip appspec.yml deploy/scripts/
-        install_dependencies.sh deploy/scripts/start_docker.sh
-        
+
+
         zip -r hybrid_rec_sys.zip \
           data/cleaned_data.csv \
           data/content_based.npz \
@@ -86,5 +91,4 @@ jobs:
     - name: Upload ZIP to S3
       if: success()
       run: |
-        aws s3 cp deployment.zip s3://hybridrecsysdeployementbucket/deployment.zip
         aws s3 cp hybrid_rec_sys.zip s3://hybridrecsysdeployementbucket/hybrid_rec_sys.zip
