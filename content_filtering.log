@@ -174,3 +174,9 @@ TypeError: recommend() missing 1 required positional argument: 'transformed_data
 2025-03-22 22:05:00,795 - DEBUG - platform is win32
 2025-03-22 22:05:01,127 - DEBUG - CACHEDIR=C:\Users\amrpu\.matplotlib
 2025-03-22 22:05:01,165 - DEBUG - Using fontManager instance from C:\Users\amrpu\.matplotlib\fontlist-v390.json
+2025-03-24 11:59:25,055 - DEBUG - matplotlib data path: C:\Python\Lib\site-packages\matplotlib\mpl-data
+2025-03-24 11:59:25,124 - DEBUG - CONFIGDIR=C:\Users\amrpu\.matplotlib
+2025-03-24 11:59:25,130 - DEBUG - interactive is False
+2025-03-24 11:59:25,132 - DEBUG - platform is win32
+2025-03-24 11:59:25,440 - DEBUG - CACHEDIR=C:\Users\amrpu\.matplotlib
+2025-03-24 11:59:25,490 - DEBUG - Using fontManager instance from C:\Users\amrpu\.matplotlib\fontlist-v390.json
