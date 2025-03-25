@@ -1,19 +1,20 @@
-# set up the base image
-FROM python:3.12
+# Use slim Python image for smaller size and efficiency
+FROM python:3.12-slim
 
-# set the working directory
-WORKDIR /app/
+# Set working directory
+WORKDIR /app
 
-# copy the requirements file to workdir
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements file first to leverage Docker cache
 COPY requirements.txt .
 
-# install the requirements
-RUN pip install -r requirements.txt
-
-
-# Create .streamlit directory and config file
-# RUN mkdir -p .streamlit
-# RUN echo '[server]\nenableCORS = false\nenableXsrfProtection = false' > .streamlit/config.toml
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt \
+    && rm requirements.txt
 
 # Copy all required data files at once
 COPY ./data/cleaned_data.csv \
@@ -32,11 +33,60 @@ COPY app.py \
      data_cleaning.py \
      ./
 
+# Set environment variables for Python optimization
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# expose the port on the container
+# Create a non-root user for security
+RUN useradd -m appuser
+USER appuser
+
+# Expose the port Streamlit will run on
 EXPOSE 8000
-# run the streamlit app with the correct logging flag
-CMD [ "streamlit", "run", "app.py", "--server.port", "8000", "--logger.level", "debug" ]
+
+# Command to run the Streamlit application
+CMD ["streamlit", "run", "app.py", "--server.port", "8000", "--logger.level", "debug"]
+
+
+# set up the base image
+# FROM python:3.12
+
+# # set the working directory
+# WORKDIR /app/
+
+# # copy the requirements file to workdir
+# COPY requirements.txt .
+
+# # install the requirements
+# RUN pip install -r requirements.txt
+
+
+# # Create .streamlit directory and config file
+# # RUN mkdir -p .streamlit
+# # RUN echo '[server]\nenableCORS = false\nenableXsrfProtection = false' > .streamlit/config.toml
+
+# # Copy all required data files at once
+# COPY ./data/cleaned_data.csv \
+#      ./data/content_based.npz \
+#      ./data/item_user_matrix.npz \
+#      ./data/transformed_data.npz \
+#      ./data/filtered_songs.csv \
+#      ./data/
+
+# # Copy all required Python scripts at once
+# COPY app.py \
+#      collaberative_filtering.py \
+#      content_based_filtering.py \
+#      hybrid_recomender.py \
+#      utility_required_hybridrec.py \
+#      data_cleaning.py \
+#      ./
+
+
+# # expose the port on the container
+# EXPOSE 8000
+# # run the streamlit app with the correct logging flag
+# CMD [ "streamlit", "run", "app.py", "--server.port", "8000", "--logger.level", "debug" ]
 
 
 # expose the port on the container
