@@ -238,15 +238,7 @@ if ((st.session_state.filtered_songs_df["name"].str.lower() == song_name.lower()
                                             "Hybrid Recommender System"],
                                 index= 2)
 
-    # diversity slider
-    diversity = st.slider(label="Diversity in Recommendations",
-                        min_value=1,
-                        max_value=10,
-                        value=5,
-                        step=1)
 
-    content_based_weight = 1 - (diversity / 10)
-    collaborative_weight = diversity/10
 else:
     # type of filtering
     filtering_type = st.selectbox(label= 'Select the type of filtering:', 
@@ -317,6 +309,15 @@ elif filtering_type == 'Collaborative Filtering':
             st.write(f"Sorry, we couldn't find {song_name} in our database. Please try another song.")
 
 elif filtering_type == "Hybrid Recommender System":
+    # diversity slider
+    diversity = st.slider(label="Diversity in Recommendations",
+                        min_value=1,
+                        max_value=10,
+                        value=5,
+                        step=1)
+
+    content_based_weight = 1 - (diversity / 10)
+    collaborative_weight = diversity/10
     if st.button('Get Recommendations'):
         if ((st.session_state.filtered_songs_df["name"].str.lower() == song_name.lower()) & 
     (st.session_state.filtered_songs_df["artist"].str.lower() == artist_name.lower())).any():
