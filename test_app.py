@@ -10,6 +10,7 @@ def get_app_status(url):
     status_code = response.status_code
     return status_code
 
+
 # test for the app home page loading
 def test_app_loading():
     # wait for the app to load
