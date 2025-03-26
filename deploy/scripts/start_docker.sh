@@ -21,6 +21,6 @@ fi
 
 
 echo "Starting new container..."
-docker run -d --memory=512m --memory-swap=1g -p 8000:8000 --name hybrid_recsys 116981799876.dkr.ecr.ap-south-1.amazonaws.com/spotify_recsys:latest
+docker run -d --memory=512m --memory-swap=1g -p 80:8000 --name hybrid_recsys 116981799876.dkr.ecr.ap-south-1.amazonaws.com/spotify_recsys:latest
 
 echo "Container started successfully."
