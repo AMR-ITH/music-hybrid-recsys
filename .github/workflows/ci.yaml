@@ -64,36 +64,28 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
         docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
+          # Zip the required files
 
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v4
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: ap-south-1
+    - name: Zip files for deployment
+      if: success()
+      run: |
+            zip -r deployment.zip appspec.yml deploy/scripts/install_dependencies.sh deploy/scripts/start_docker.sh
 
-
-    # - name: Zip files for deployment
-    #   run: |
-
-
-    #     zip -r hybrid_rec_sys.zip \
-    #       data/cleaned_data.csv \
-    #       data/content_based.npz \
-    #       data/item_user_matrix.npz \
-    #       data/transformed_data.npz \
-    #       data/filtered_songs.csv \
-    #       app.py \
-    #       collaberative_filtering.py \
-    #       content_based_filtering.py \
-    #       hybrid_recomender.py \
-    #       utility_required_hybridrec.py \
-    #       data_cleaning.py \
-    #       requirements.txt
-          
-          
-
-    # - name: Upload ZIP to S3
+    - name: Upload ZIP to S3
+      if: success()
+      run: |
+        aws s3 cp hybrid_rec_sys.zip s3://hybridrecsysdeployementbucket/hybrid_rec_sys.zip
+    
+      # Deploy to AWS CodeDeploy using the uploaded ZIP file
+    # - name: Deploy to AWS CodeDeploy
     #   if: success()
     #   run: |
-    #     aws s3 cp hybrid_rec_sys.zip s3://hybridrecsysdeployementbucket/hybrid_rec_sys.zip
+    #       aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #       aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #       aws deploy create-deployment \
+    #       --application-name hybridrecommendersystem \
+    #       --deployment-config-name CodeDeployDefault.AllAtOnce \
+    #       --deployment-group-name hybridrecsysdeploymentgroup \
+    #       --s3-location bucket=hybridrecsysdeploymentbucket,key=deployment.zip,bundleType=zip \
+    #       --file-exists-behavior OVERWRITE \
+    #       --region ap-south-1
