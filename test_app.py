@@ -11,6 +11,7 @@ def get_app_status(url):
     return status_code
 
 
+
 # test for the app home page loading
 def test_app_loading():
     # wait for the app to load
