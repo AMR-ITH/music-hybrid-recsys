@@ -15,7 +15,7 @@ COPY requirements_app.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements_app.txt \
-    && rm requirements.txt
+    && rm requirements_app.txt
 
 # Copy all required data files at once
 COPY ./data/cleaned_data.csv \
