@@ -26,3 +26,7 @@ sudo usermod -aG docker ubuntu
 
 # Clean up the AWS CLI installation files
 rm -rf /home/ubuntu/awscliv2.zip /home/ubuntu/aws
+
+
+# Reboot the system to apply group changes
+sudo reboot

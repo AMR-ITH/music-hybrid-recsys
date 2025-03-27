@@ -3,7 +3,7 @@
 exec > /home/ubuntu/start_docker.log 2>&1
 
 echo "Logging in to ECR..."
-aws aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 116981799876.dkr.ecr.ap-south-1.amazonaws.com
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 116981799876.dkr.ecr.ap-south-1.amazonaws.com
 
 echo "Pulling Docker image..."
 docker pull 116981799876.dkr.ecr.ap-south-1.amazonaws.com/spotify_recsys:latest
