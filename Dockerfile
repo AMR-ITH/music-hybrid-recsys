@@ -10,12 +10,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file first to leverage Docker cache
-COPY requirements_app.txt .
+COPY requirements.txt .
 
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements_app.txt \
-    && rm requirements_app.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && rm requirements.txt
 
 # Copy all required data files at once
 COPY ./data/cleaned_data.csv \
