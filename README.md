@@ -1,3 +1,5 @@
+## 🔍 How Recommendations Work
+### Content-Based Filtering (Cosine Similarity)
 Step 1: Compute Cosine Similarity
 
 Cosine similarity between vectors A and B is calculated as:
