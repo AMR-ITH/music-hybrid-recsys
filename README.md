@@ -1,4 +1,4 @@
-$$ Step 1: Compute Cosine Similarity
+Step 1: Compute Cosine Similarity
 
 Cosine similarity between vectors A and B is calculated as:
 cos(θ)=A⋅B∥A∥∥B∥=∑i=1nAiBi∑i=1nAi2∑i=1nBi2
