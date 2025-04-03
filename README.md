@@ -109,12 +109,12 @@ This section combines content-based and collaborative filtering for improved rec
     - `x5`: 0.75
     - `x4`: 0.80
     - `x1`: 0.70
-  - **Weights**: \( w_1 = 0.6 \) (content), \( w_2 = 0.4 \) (collaborative).
+  - **Weights**: ( w_1 = 0.6 )*(content), ( w_2 = 0.4 )*(collaborative).
   - **Hybrid Scores**:
-    - `x2`: \( 0.6 \cdot 0.94 + 0.4 \cdot 0.88 = 0.564 + 0.352 = 0.916 \)
-    - `x5`: \( 0.6 \cdot 0.85 + 0.4 \cdot 0.75 = 0.510 + 0.300 = 0.810 \)
-    - `x4`: \( 0.6 \cdot 0.83 + 0.4 \cdot 0.80 = 0.498 + 0.320 = 0.818 \)
-    - `x1`: \( 0.6 \cdot 0.79 + 0.4 \cdot 0.70 = 0.474 + 0.280 = 0.754 \)
+    - `x2`: ( 0.6 * 0.94 + 0.4 * 0.88 = 0.564 + 0.352 = 0.916 )
+    - `x5`: ( 0.6 * 0.85 + 0.4 * 0.75 = 0.510 + 0.300 = 0.810 )
+    - `x4`: ( 0.6 * 0.83 + 0.4 * 0.80 = 0.498 + 0.320 = 0.818 )
+    - `x1`: ( 0.6 * 0.79 + 0.4 * 0.70 = 0.474 + 0.280 = 0.754 )
 
 #### Step 2: Sort and Recommend
 Ranked by hybrid score:
