@@ -135,7 +135,7 @@ You can interact with the recommendation system at the following link:
 ## 📋 Example Input Data
 You can download an example input dataset in CSV format from the following link:  
 [https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv](https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv)
-example input : \n
-song names --> [Love Story,it's about time,Shake It Off] \n
+example input : 
+song names --> [Love Story,it's about time,Shake It Off] 
 artist name --> [Taylor Swift,jamie cullum,Taylor Swift]
 
