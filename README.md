@@ -23,11 +23,5 @@ A scalable recommendation system combining collaborative and content-based filte
 - Packages artifacts and stores them in AWS S3.
 - Deploys using AWS CodeDeploy with Blue/Green strategy for zero-downtime updates.
 
-### CI/CD Pipeline
-```mermaid
-graph LR
-  A[GitHub Actions] --> B[Build Docker Image]
-  B --> C[Push to ECR]
-  C --> D[Deploy via CodeDeploy]
 
 
