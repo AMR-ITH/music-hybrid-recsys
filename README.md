@@ -129,3 +129,13 @@ For a user who listens to Song `x3`, recommend:
 2. Song C (`x4`)
 3. Song D (`x5`)
 
+## 🌐 Try It Out
+You can interact with the recommendation system at the following link:  
+(http://3.109.121.62:8000/)
+## 📋 Example Input Data
+You can download an example input dataset in CSV format from the following link:  
+[https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv](https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv)
+example input : 
+song names --> [Love Story,it's about time,Shake It Off]
+artist name --> [Taylor Swift,jamie cullum,Taylor Swift]
+
