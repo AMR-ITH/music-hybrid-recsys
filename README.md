@@ -10,14 +10,14 @@ A scalable recommendation system combining collaborative and content-based filte
 ## 📊 System Overview
 
 ### Image 1: Machine Learning Workflow with Version Control
-![Machine Learning Workflow](doc/ml_workflow.png)
+![Machine Learning Workflow](docs/ml_workflow.png)
 - Illustrates a pipeline for developing and versioning a machine learning model.
 - Includes Notebook, Source Code, and Data managed with Git and DVC.
 - Uses GitHub for code storage and AWS S3 for large datasets/models.
 - Features a DVC pipeline (`dvc.yaml`) to automate and reproduce the best model.
 
 ### Image 2: CI/CD and Deployment Process
-![CI/CD and Deployment Process](doc/architecture.png)
+![CI/CD and Deployment Process](docs/architecture.png)
 - Depicts the CI/CD pipeline and deployment to production.
 - Automates builds with GitHub Actions and Docker, storing images in AWS ECR.
 - Packages artifacts and stores them in AWS S3.
