@@ -38,9 +38,7 @@ Below is an example of a content-based filtering recommendation system using cos
 #### Step 1: Compute Cosine Similarity
 Cosine similarity between vectors \( A \) and \( B \) is calculated as:
 
-\[
-\cos(\theta) = \frac{A \cdot B}{\|A\| \|B\|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}}
-\]
+\[ \cos(\theta) = \frac{A \cdot B}{|A| |B|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}} \]
 
 **Calculations for `x3` vs others:**
 
