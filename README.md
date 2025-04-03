@@ -9,9 +9,19 @@ A scalable recommendation system combining collaborative and content-based filte
 
 ## 📊 System Overview
 
-### Architecture
-**First Diagram: Machine Learning Workflow with Version Control**
-![Hybrid Recommender Architecture](docs/ml_workflow.png)
+### Image 1: Machine Learning Workflow with Version Control
+![Machine Learning Workflow](doc/ml_workflow)
+- Illustrates a pipeline for developing and versioning a machine learning model.
+- Includes Notebook, Source Code, and Data managed with Git and DVC.
+- Uses GitHub for code storage and AWS S3 for large datasets/models.
+- Features a DVC pipeline (`dvc.yaml`) to automate and reproduce the best model.
+
+### Image 2: CI/CD and Deployment Process
+![CI/CD and Deployment Process](doc/architecture)
+- Depicts the CI/CD pipeline and deployment to production.
+- Automates builds with GitHub Actions and Docker, storing images in AWS ECR.
+- Packages artifacts and stores them in AWS S3.
+- Deploys using AWS CodeDeploy with Blue/Green strategy for zero-downtime updates.
 
 ### CI/CD Pipeline
 ```mermaid
