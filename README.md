@@ -10,7 +10,7 @@ A scalable recommendation system combining collaborative and content-based filte
 ## 📊 System Overview
 
 ### Architecture
-
+![Hybrid Recommender Architecture](docs/architecture.png)
 
 ### CI/CD Pipeline
 ```mermaid
