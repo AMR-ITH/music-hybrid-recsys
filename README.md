@@ -10,7 +10,7 @@ A scalable recommendation system combining collaborative and content-based filte
 ## 📊 System Overview
 
 ### Architecture
-First Diagram: Machine Learning Workflow with Version Control
+**First Diagram: Machine Learning Workflow with Version Control**
 ![Hybrid Recommender Architecture](docs/ml_workflow.png)
 
 ### CI/CD Pipeline
