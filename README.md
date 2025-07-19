@@ -131,7 +131,7 @@ For a user who listens to Song `x3`, recommend:
 
 ## 🌐 Try It Out
 You can interact with the recommendation system at the following link:  
-(http://3.109.121.62:8000/)
+(https://appapphybridrecsysgit-jdiu7sjcsnpqvytniwbf2f.streamlit.app/;http://3.109.121.62:8000/)
 ## 📋 Example Input Data
 You can download an example input dataset in CSV format from the following link:  
 [https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv](https://raw.githubusercontent.com/AMR-ITH/music-hybrid-recsys/refs/heads/development/docs/input.csv)
